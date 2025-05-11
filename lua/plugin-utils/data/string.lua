@@ -74,9 +74,11 @@ function M.trim_end(str)
 end
 
 function M.string2chars(str)
-    local t = {}
-    for k in string.gmatch(str, '.') do table.insert(t, k) end
-    return t
+    local list = {}
+    for uchar in string.gmatch(str, "[^\128-\191][\128-\191]*") do
+        table.insert(list, uchar)
+    end
+    return list
 end
 
 function M.matchstrpos(str, need, ...)
