@@ -8,61 +8,40 @@
 
 local M = {}
 
-local log = require('spacevim.logger').derive('spinners')
-
-M._data = {
-  dot1 = {
-    frames = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
-    strwidth = 1,
-    timeout = 80,
-  },
+local icons = {
+    default = {
+        frames = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
+        strwidth = 1,
+        timeout = 80,
+    },
 }
 
-M._id = 0
+function M:new(func)
+    local spinners = {}
+    spinners.func = func
 
-function M.Onframe(...)
-  if M.index < #M.spinners then
-    M.index = M.index + 1
-  else
-    M.index = 1
-  end
-  if type(M.func) == 'function' then
-    local ok, err = pcall(M.func, M.spinners[M.index])
-    if not ok then
-      log.debug('failed to call spinners functions:\n')
-      log.debug(err)
+    function spinners:start()
+        if self.id then
+            return
+        end
+        local index = 1
+        self.func(icons.default.frames[index])
+        self.id = vim.fn.timer_start(icons.default.timeout, function(...)
+            if index < #icons.default.frames then
+                index = index + 1
+            else
+                index = 1
+            end
+
+            self.func(icons.default.frames[index])
+        end, { ['repeat'] = -1 })
     end
-  end
-end
 
-function M.stop()
-  if M.timer_id then
-    vim.fn.timer_stop(M.timer_id)
-    M.timer_id = nil
-  end
-end
+    function spinners:stop()
+        pcall(vim.fn.timer_stop(self.id))
+    end
 
--- if var is a function, then the function will be called with one argv
-function M.apply(name, var)
-  local data = M._data[name]
-
-  if not data then
-    log.debug('faile to apply spinners, no data named ' .. name)
-    return
-  end
-  local time = data.timeout or 80
-  M.index = 1
-  M.spinners = M._data[name].frames
-  if type(var) == 'function' then
-    M.func = var
-    M.func(M.spinners[M.index])
-  end
-  M.timer_id = vim.fn.timer_start(time, M.Onframe, { ['repeat'] = -1 })
-  return { M.timer_id, M._data[name].strwidth }
-end
-
-function M.get_str()
-  return M.str
+    return spinners
 end
 
 return M
