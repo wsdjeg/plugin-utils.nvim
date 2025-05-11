@@ -6,12 +6,12 @@
 -- License: GPLv3
 --=============================================================================
 
-local Key = require('spacevim.api').import('vim.keys')
+local Key = require('plugin-utils.vim.keys')
 
 local M = {}
 
-M.__cmp = require('spacevim.api').import('vim.compatible')
-M.__vim = require('spacevim.api').import('vim')
+M.__cmp = require('plugin-utils.vim.compatible')
+M.__vim = require('plugin-utils.vim')
 
 M._keys = {
   close = Key.t('<Esc>'),

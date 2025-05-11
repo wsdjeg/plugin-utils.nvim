@@ -8,7 +8,7 @@
 
 local M = {}
 
-local str = require('spacevim.api.data.string')
+local str = require('plugin-utils.data.string')
 
 
 
