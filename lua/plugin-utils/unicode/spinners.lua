@@ -7,7 +7,7 @@
 --=============================================================================
 
 local M = {}
-
+-- https://raw.githubusercontent.com/sindresorhus/cli-spinners/master/spinners.json
 local icons = {
     default = {
         frames = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
