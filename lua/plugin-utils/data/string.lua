@@ -66,11 +66,11 @@ end
 
 
 function M.trim_start(str)
-    
+    return str:gsub('^%s+', '')
 end
 
 function M.trim_end(str)
-    
+    return str:gsub('%s+$', '')
 end
 
 function M.string2chars(str)
