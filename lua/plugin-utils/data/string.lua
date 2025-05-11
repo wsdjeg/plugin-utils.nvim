@@ -32,8 +32,13 @@ function M.fill(str, length, ...)
     return v .. string.rep(char, length - string.len(v))
 end
 
-function M.strcharpart(str, start, ...)
-    
+function M.strcharpart(str, start, _end)
+    local chars = M.string2chars(str)
+    local new_chars = {}
+    for i=start, math.min(_end, #chars) do
+        table.insert(new_chars, chars[i])
+    end
+    return table.concat(new_chars, '')
 end
 
 function M.toggle_case(str)
